@@ -1,22 +1,17 @@
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::{BufRead, BufReader, Error};
+
+const INPUT: &str = include_str!("../../files/day_1.txt");
 
 #[allow(dead_code)]
-pub fn run() -> Result<String, Error> {
-    let file = File::open("./files/day_1.txt")?;
+pub fn run() -> String {
+    let mut lefts: Vec<i32> = Vec::with_capacity(100);
+    let mut rights: HashMap<i32, i32> = HashMap::with_capacity(1000);
 
-    let reader = BufReader::new(file);
-
-    let mut lefts: Vec<i32> = Vec::new();
-    let mut rights: HashMap<i32, i32> = HashMap::new();
-
-    for line in reader.lines() {
-        let line = line?;
-        let numbers = line.split(" ").collect::<Vec<&str>>();
-        let left: i32 = numbers[0].parse().unwrap();
-        let right: i32 = numbers[3].parse().unwrap();
-        lefts.push(left);
+    for line in INPUT.lines() {
+        let mut values = line.split_ascii_whitespace();
+        lefts.push(values.next().unwrap().parse::<i32>().unwrap());
+        
+        let right = values.next().unwrap().parse::<i32>().unwrap();
         rights.insert(right, rights.get(&right).unwrap_or(&0) + 1);
     }
 
@@ -26,8 +21,8 @@ pub fn run() -> Result<String, Error> {
         let similarity = rights.get(&lefts[i]).unwrap_or(&0);
         sum_similarity += similarity * lefts[i];
     }
-    
+
     let result = sum_similarity.to_string();
 
-    Ok(result)
+    result
 }

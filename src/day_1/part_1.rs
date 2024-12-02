@@ -1,38 +1,27 @@
-use std::{fs::File, io::{BufRead, BufReader, Error}};
+const INPUT: &str = include_str!("../../files/day_1.txt");
 
 #[allow(dead_code)]
-pub fn run() -> Result<String, Error>  {
-    let file = File::open("./files/day_1.txt")?;
+pub fn run() -> String {
+    let mut lefts: Vec<i32> = Vec::with_capacity(1000);
+    let mut rights: Vec<i32> = Vec::with_capacity(1000);
 
-    let reader = BufReader::new(file);
-
-    let mut lefts: Vec<i32> = Vec::new();
-    let mut rights: Vec<i32> = Vec::new();
-
-    for line in reader.lines() {
-        let line = line?;
-        let numbers = line.split(" ").collect::<Vec<&str>>();
-        let left: i32 = numbers[0].parse().unwrap();
-        let right: i32 = numbers[3].parse().unwrap();
-        lefts.push(left);
-        rights.push(right);
+    for line in INPUT.lines() {
+        let mut values = line.split_ascii_whitespace();
+        lefts.push(values.next().unwrap().parse::<i32>().unwrap());
+        rights.push(values.next().unwrap().parse::<i32>().unwrap());
     }
 
-    lefts.sort();
-    rights.sort();
+    lefts.sort_unstable();
+    rights.sort_unstable();
 
     let mut sum_diff: i32 = 0;
 
     for i in 0..lefts.len() {
         let diff = lefts[i] - rights[i];
-        if diff < 0 {
-            sum_diff += diff * -1;
-            continue;
-        }
-        sum_diff += diff;
+        sum_diff += diff.abs();
     }
 
     let result = sum_diff.to_string();
 
-    Ok(result)
+    result
 }
