@@ -1,8 +1,7 @@
-use std::fs::File;
-use std::io::{self, BufRead, BufReader};
+use std::{fs::File, io::{BufRead, BufReader, Error}};
 
 #[allow(dead_code)]
-pub fn run() -> io::Result<()> {
+pub fn run() -> Result<String, Error>  {
     let file = File::open("./files/day_1.txt")?;
 
     let reader = BufReader::new(file);
@@ -33,7 +32,7 @@ pub fn run() -> io::Result<()> {
         sum_diff += diff;
     }
 
-    println!("{}", sum_diff);
+    let result = sum_diff.to_string();
 
-    Ok(())
+    Ok(result)
 }

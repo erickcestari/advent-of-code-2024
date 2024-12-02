@@ -1,8 +1,8 @@
 use std::fs::File;
-use std::io::{self, BufRead, BufReader};
+use std::io::{BufRead, BufReader, Error};
 
 #[allow(dead_code)]
-pub fn run() -> io::Result<()> {
+pub fn run() -> Result<String, Error>  {
     let file = File::open("./files/day_2.txt")?;
 
     let reader = BufReader::new(file);
@@ -22,8 +22,9 @@ pub fn run() -> io::Result<()> {
         }
     }
 
-    println!("{:?}", safes);
-    Ok(())
+    let result = safes.to_string();
+    
+    Ok(result)
 }
 
 fn is_safe_with_dampener(numbers: Vec<i32>) -> bool {

@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 use std::fs::File;
-use std::io::{self, BufRead, BufReader};
+use std::io::{BufRead, BufReader, Error};
 
 #[allow(dead_code)]
-pub fn run() -> io::Result<()> {
+pub fn run() -> Result<String, Error> {
     let file = File::open("./files/day_1.txt")?;
 
     let reader = BufReader::new(file);
@@ -26,8 +26,8 @@ pub fn run() -> io::Result<()> {
         let similarity = rights.get(&lefts[i]).unwrap_or(&0);
         sum_similarity += similarity * lefts[i];
     }
+    
+    let result = sum_similarity.to_string();
 
-    println!("{}", sum_similarity);
-
-    Ok(())
+    Ok(result)
 }
