@@ -1,5 +1,5 @@
-use advent_of_code::day_4::part_2;
+use advent_of_code::day_5::part_1;
 
 fn main() {
-    print!("{}", part_2::run());
+    print!("{}", part_1::run());
 }
