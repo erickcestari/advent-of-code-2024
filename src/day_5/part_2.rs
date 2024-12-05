@@ -2,9 +2,8 @@ use std::collections::{HashMap, HashSet};
 
 const INPUT: &str = include_str!("../../files/day_5.txt");
 
-#[allow(dead_code)]
 pub fn run() -> String {
-    let mut rules = vec![];
+    let mut rules: Vec<(&str, &str)> = vec![];
     let mut updates: Vec<Vec<&str>> = Vec::new();
 
     let mut parsing_rules = true;
@@ -33,10 +32,12 @@ pub fn run() -> String {
 
     for update in updates {
         if is_correct_order(&update, &graph) {
-            let middle = update[update.len() / 2];
-            middle_sum += middle.parse::<u32>().unwrap();
             continue;
         }
+
+        let sorted_update = sort_update(&update, &graph);
+        let middle = sorted_update[sorted_update.len() / 2];
+        middle_sum += middle.parse::<u32>().unwrap();
     }
 
     middle_sum.to_string()
@@ -53,4 +54,25 @@ fn is_correct_order(update: &[&str], graph: &HashMap<&str, HashSet<&str>>) -> bo
         }
     }
     true
+}
+
+fn sort_update<'a>(
+    update: &'a [&'a str],
+    graph: &'a HashMap<&'a str, HashSet<&'a str>>,
+) -> Vec<&'a str> {
+    let mut sorted = update.to_vec();
+    sorted.sort_by(|&a, &b| {
+        if let Some(dependencies) = graph.get(&b) {
+            if dependencies.contains(&a) {
+                return std::cmp::Ordering::Less;
+            }
+        }
+        if let Some(dependencies) = graph.get(&a) {
+            if dependencies.contains(&b) {
+                return std::cmp::Ordering::Greater;
+            }
+        }
+        std::cmp::Ordering::Equal
+    });
+    sorted
 }
