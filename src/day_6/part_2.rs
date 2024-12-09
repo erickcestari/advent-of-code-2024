@@ -2,6 +2,7 @@ use std::collections::HashSet;
 
 const INPUT: &str = include_str!("../../files/day_6.txt");
 
+#[allow(dead_code)]
 pub fn run() -> String {
     let mut matrix: Vec<Vec<char>> = Vec::new();
     let mut guard_start = (0, 0, '^');
